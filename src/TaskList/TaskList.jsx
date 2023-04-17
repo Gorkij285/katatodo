@@ -1,8 +1,9 @@
-// eslint-disable-next-line import/newline-after-import
+/* eslint-disable import/order */
 import React from 'react'
 import PropTypes, { arrayOf } from 'prop-types'
 import Task from '../Task/Task'
 import './TaskList.css'
+/* eslint-enable import/order */
 
 const TaskList = ({ todos, onDeleted, toggleDone, filter }) => {
   let newDone = filter == 'Active' ? 1 : 0

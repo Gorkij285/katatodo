@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import './Task.css'
+// eslint-disable-next-line no-unused-vars
 import { isThisHour } from 'date-fns'
 
 const Span = (prop) => {

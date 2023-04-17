@@ -1,11 +1,9 @@
-// eslint-disable-next-line import/newline-after-import
+/* eslint-disable import/order */
 import React from 'react'
-// eslint-disable-next-line import/newline-after-import
 import PropTypes from 'prop-types'
-// eslint-disable-next-line import/newline-after-import
 import './Footer.css'
-// eslint-disable-next-line import/newline-after-import
 import TasksFilter from '../TasksFilter/TasksFilter'
+/* eslint-enable import/order */
 
 const Footer = ({ count = 1, filterAll, filterActive, filterCompleted, clearData }) => {
   return (
