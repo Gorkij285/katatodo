@@ -21,40 +21,37 @@ class Task extends React.Component {
 
   handleClick = () => {
     const intervalId = setInterval(() => {
-      this.setState(prevState => ({
-        time: prevState.time + 1
-      }));
-    }, 1000);
-    this.setState({ intervalId });
-  };
+      this.setState((prevState) => ({
+        time: prevState.time + 1,
+      }))
+    }, 1000)
+    this.setState({ intervalId })
+  }
 
   handleStart = () => {
-    console.log('СТАРТ')
-    if (this.state.intervalId) return;
+    if (this.state.intervalId) return
     const intervalId = setInterval(() => {
-      this.setState(prevState => ({
-        time: prevState.time + 1
-      }));
-    }, 1000);
-    this.setState({ intervalId });
-  };
+      this.setState((prevState) => ({
+        time: prevState.time + 1,
+      }))
+    }, 1000)
+    this.setState({ intervalId })
+  }
 
   handlePause = () => {
-    console.log('СТОП')
     if (this.state.intervalId) {
-      clearInterval(this.state.intervalId);
-      this.setState({ intervalId: null });
+      clearInterval(this.state.intervalId)
+      this.setState({ intervalId: null })
     }
   }
 
   componentWillUnmount() {
-    clearInterval(this.state.intervalId);
+    clearInterval(this.state.intervalId)
   }
 
   render() {
-    console.log(this.props)
     const { value, toggleDone, toggleCompleted, done } = this.props
-    const {time} = this.state
+    const { time } = this.state
 
     let classNames = ''
 
@@ -64,10 +61,7 @@ class Task extends React.Component {
 
     let result = formatDistanceToNow(new Date(this.state.dt), { includeSeconds: true }, { addSuffix: true })
 
-    let watch = time ?
-                <span className='timer'>{formatTime(time)}</span>:
-                <span className='timer'>{'00:00:00'}</span>
-
+    let watch = time ? <span className="timer">{formatTime(time)}</span> : <span className="timer">{'00:00:00'}</span>
 
     return (
       <li className={classNames}>
@@ -79,10 +73,10 @@ class Task extends React.Component {
           </label>
           <div>
             {watch}
-            <button className="timerButOne"onClick={this.handleStart} >
+            <button className="timerButOne" onClick={this.handleStart}>
               Start
             </button>
-            <button className="timerButTwo" onClick={this.handlePause} >
+            <button className="timerButTwo" onClick={this.handlePause}>
               Pause
             </button>
           </div>
@@ -94,12 +88,14 @@ class Task extends React.Component {
   }
 }
 function formatTime(seconds) {
-  const hours = Math.floor(seconds / 3600);
-  seconds = seconds % 3600;
-  const minutes = Math.floor(seconds / 60);
-  seconds = seconds % 60;
-  const formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-  return formattedTime;
+  const hours = Math.floor(seconds / 3600)
+  seconds = seconds % 3600
+  const minutes = Math.floor(seconds / 60)
+  seconds = seconds % 60
+  const formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(
+    seconds
+  ).padStart(2, '0')}`
+  return formattedTime
 }
 
 Task.defaultProps = {
