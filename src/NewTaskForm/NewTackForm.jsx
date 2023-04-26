@@ -1,43 +1,34 @@
-import React from 'react'
+import React, { useState } from 'react'
 // eslint-disable-next-line no-unused-vars
 import PropTypes from 'prop-types'
 import './NewTackForm.css'
 
-class NewTaskForm extends React.Component {
-  state = {
-    label: '',
-  }
+function NewTaskForm({ onItemAdded }) {
+  const [label, setLabel] = useState('')
 
-  onLabelChange = (e) => {
+  const onLabelChange = (e) => {
     const value = e.target.value
-    this.setState({
-      label: value,
-    })
+    setLabel(value)
   }
 
-  onSubmit = (e) => {
+  const onSubmit = (e) => {
     e.preventDefault()
-    if (this.state.label.length > 0) this.props.onItemAdded(this.state.label)
-    this.setState({
-      label: '',
-    })
+    if (label.length > 0) onItemAdded(label)
+    setLabel('')
   }
 
-  render() {
-    return (
-      <form className="header" onSubmit={this.onSubmit}>
-        <h1>todos</h1>
-
-        <input
-          className="new-todo"
-          placeholder="What needs to be done?"
-          autoFocus
-          onChange={this.onLabelChange}
-          value={this.state.label}
-        />
-      </form>
-    )
-  }
+  return (
+    <form className="header" onSubmit={onSubmit}>
+      <h1>todos</h1>
+      <input
+        className="new-todo"
+        placeholder="What needs to be done?"
+        autoFocus
+        onChange={onLabelChange}
+        value={label}
+      />
+    </form>
+  )
 }
 
 export default NewTaskForm

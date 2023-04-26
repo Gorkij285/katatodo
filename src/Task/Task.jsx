@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import './Task.css'
@@ -9,83 +9,64 @@ const Span = (prop) => {
   return <span className="description">{prop.value}</span>
 }
 
-class Task extends React.Component {
-  state = {
-    dt: Date.now(),
-    time: 0,
-    intervalId: null,
-  }
-  static propTypes = {
-    value: PropTypes.string,
-  }
+function Task({ value, toggleDone, toggleCompleted, done }) {
+  // eslint-disable-next-line no-unused-vars
+  const [dt, setDt] = useState(Date.now())
+  const [time, setTime] = useState(0)
+  const [intervalId, setIntervalId] = useState(null)
 
-  handleClick = () => {
-    const intervalId = setInterval(() => {
-      this.setState((prevState) => ({
-        time: prevState.time + 1,
-      }))
-    }, 1000)
-    this.setState({ intervalId })
-  }
+  useEffect(() => {
+    return () => clearInterval(intervalId)
+  }, [])
 
-  handleStart = () => {
-    if (this.state.intervalId) return
-    const intervalId = setInterval(() => {
-      this.setState((prevState) => ({
-        time: prevState.time + 1,
-      }))
-    }, 1000)
-    this.setState({ intervalId })
-  }
-
-  handlePause = () => {
-    if (this.state.intervalId) {
-      clearInterval(this.state.intervalId)
-      this.setState({ intervalId: null })
+  const handleStart = () => {
+    if (!intervalId) {
+      const intervalId = setInterval(() => {
+        setTime((val) => val + 1)
+      }, 1000)
+      setIntervalId(intervalId)
     }
   }
 
-  componentWillUnmount() {
-    clearInterval(this.state.intervalId)
+  const handlePause = () => {
+    if (intervalId) {
+      clearInterval(intervalId)
+      setIntervalId(null)
+    }
   }
 
-  render() {
-    const { value, toggleDone, toggleCompleted, done } = this.props
-    const { time } = this.state
+  let classNames = ''
 
-    let classNames = ''
+  if (!done) {
+    classNames += 'completed'
+  }
 
-    if (!done) {
-      classNames += 'completed'
-    }
+  let result = formatDistanceToNow(new Date(dt), { includeSeconds: true }, { addSuffix: true })
 
-    let result = formatDistanceToNow(new Date(this.state.dt), { includeSeconds: true }, { addSuffix: true })
+  let watch = time ? <span className="timer">{formatTime(time)}</span> : <span className="timer">{'00:00:00'}</span>
 
-    let watch = time ? <span className="timer">{formatTime(time)}</span> : <span className="timer">{'00:00:00'}</span>
-
-    return (
-      <li className={classNames}>
-        <div className="view">
-          <input className="toggle" type="checkbox" onClick={toggleDone} />
-          <label>
-            <Span value={value} />
-            <span className="created">{result}</span>
-          </label>
-          <div>
-            {watch}
-            <button className="timerButOne" onClick={this.handleStart}>
-              Start
-            </button>
-            <button className="timerButTwo" onClick={this.handlePause}>
-              Pause
-            </button>
-          </div>
-          <button className="icon icon-edit"></button>
-          <button className="icon icon-destroy" onClick={toggleCompleted}></button>
+  return (
+    <li className={classNames}>
+      <div className="view">
+        <input className="toggle" type="checkbox" onClick={toggleDone} />
+        <label>
+          <Span value={value} />
+          <span className="created">{result}</span>
+        </label>
+        <div>
+          {watch}
+          <button className="timerButOne" onClick={handleStart}>
+            Start
+          </button>
+          <button className="timerButTwo" onClick={handlePause}>
+            Pause
+          </button>
         </div>
-      </li>
-    )
-  }
+        <button className="icon icon-edit"></button>
+        <button className="icon icon-destroy" onClick={toggleCompleted}></button>
+      </div>
+    </li>
+  )
 }
 function formatTime(seconds) {
   const hours = Math.floor(seconds / 3600)
@@ -96,6 +77,10 @@ function formatTime(seconds) {
     seconds
   ).padStart(2, '0')}`
   return formattedTime
+}
+
+Task.propTypes = {
+  value: PropTypes.string,
 }
 
 Task.defaultProps = {
